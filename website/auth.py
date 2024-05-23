@@ -82,11 +82,17 @@ def sign_up():
         pic_name = save_profile(profile_pic)
 
         user = User.query.filter_by(email=email).first()
+        user_mobile = User.query.filter_by(phone_num=phone_num)
         if user:
             flash('Email already exists.', category='error')
 
         elif request.files['profile_pic'].filename == '':
             flash('Please upload profile Picture', category='error')
+
+        
+        elif user_mobile:
+            flash('Phone Number Already Exist', category='error')
+
         elif len(email) < 4:
             flash('Email must be greater than 3 characters.', category='error')
         elif len(first_name) < 2:
