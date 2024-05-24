@@ -6,7 +6,8 @@
 <div class="card-box text-center">
     {% if user.profile_pic %}
 
-		<img src="{{ url_for('static', filename='uploads/' + user.profile_pic)}}" class="rounded-circle avatar-xl img-thumbnail">
+		<img src="{{ url_for('static', filename='uploads/' + user.profile_pic)}}" class="rounded-circle 
+		tar-xl img-thumbnail">
 		
 		{% else %}
         <img src="https://bootdey.com/img/Content/avatar/avatar7.png" class="rounded-circle avatar-xl img-thumbnail" alt="profile-image">
