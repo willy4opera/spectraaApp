@@ -1,0 +1,76 @@
+{% extends "main.html" %} {% block title %}LOGIN{% endblock %} {% block body %}
+ <!-- contact section start -->
+ <div class="contact_section layout_padding">
+   <div class="container">
+      <div class="contact_section_2">
+         <div class="row">
+            <div class="col-md-12">
+               <h1 class="contact_taital">LOGIN ACCOUNT</h1>
+               <form method="POST">
+                  <div class="mail_section_1">
+                     <input type="text" class="mail_text" placeholder="Email" name="email">
+                     <input type="password" class="mail_text" placeholder="Password" name="password">
+                     <input type="hidden" id="latitude" class="mail_text" placeholder="latitude" name="latitude"> 
+                     <input type="hidden" id="longitude" class="mail_text" placeholder="latitude" name="longitude">  
+                     <p>........</p>
+                     <button type="submit" class="btn btn-primary">Login</button>
+                        <div class="input-group-addon">
+                            <span class="glyphicon glyphicon-th"></span>
+                        </div>
+                    </div>
+                  </div>
+               </form>
+            </div>
+         </div>
+         <!-- order section start -->
+         <div class="order_section">
+            <div class="order_taital_main">
+               <h1 class="order_taital">CONNECT WITH BEST ARTISANS</h1>
+               <div class="order_bt"><a href="#">CONNECT Now</a></div>
+            </div>
+         </div>
+         <!-- order section end -->
+      </div>
+   </div>
+</div>
+<!-- contact section end -->
+
+{% endblock %}
+{% block javascript %}
+<script>
+   
+   window.onload = function() {
+      if (navigator.geolocation) {
+           navigator.geolocation.getCurrentPosition(showPosition, showError);
+       } else {
+           alert("Geolocation is not supported by this browser.");
+       }
+   }
+
+   function showPosition(position) {
+       const latitude = position.coords.latitude;
+       const longitude = position.coords.longitude;
+       document.getElementById('latitude').value = latitude;
+       document.getElementById('longitude').value = longitude;
+       
+       
+   }
+
+   function showError(error) {
+       switch(error.code) {
+           case error.PERMISSION_DENIED:
+               alert("User denied the request for Geolocation.");
+               break;
+           case error.POSITION_UNAVAILABLE:
+               alert("Location information is unavailable.");
+               break;
+           case error.TIMEOUT:
+               alert("The request to get user location timed out.");
+               break;
+           case error.UNKNOWN_ERROR:
+               alert("An unknown error occurred.");
+               break;
+       }
+};
+</script>
+{% endblock %}
