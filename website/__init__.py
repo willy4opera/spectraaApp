@@ -8,6 +8,9 @@ from flask_login import LoginManager
 from flask_migrate import Migrate
 import os
 import secrets
+import requests
+from geopy.geocoders import OpenCage
+import json
 
 # Here, we initialize or ORM
 # The SQLAlchemy
@@ -76,3 +79,7 @@ def save_profile(picture):
     return picture_fn
 
 
+def geocode_location(latitude, longitude, api_key):
+    geolocator = OpenCage(api_key)
+    location = geolocator.reverse((latitude, longitude))
+    return location.address
