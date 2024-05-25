@@ -23,6 +23,7 @@ class User(db.Model, UserMixin):
     last_name = db.Column(db.String(150))
     dateofbirth = db.Column(db.DateTime)
     address = db.Column(db.String(300))
+    location = db.Column(db.String(300))
     phone_num = db.Column(db.Integer, unique=True)
     services = db.relationship('Services')
     profile_pic = profile_pic = db.Column(db.String(), nullable=True)
