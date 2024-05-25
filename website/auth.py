@@ -33,10 +33,20 @@ def login():
     if request.method == 'POST':
         email = request.form.get('email')
         password = request.form.get('password')
+        latitude = request.form.get('latitude')
+        longitude = request.form.get('longitude')
+
+            # Simple validation
+        if latitude is None or longitude is None:
+            return jsonify({'success': False, 'message': 'Missing information'}), 400
+        api_key = '250b35f249134d77af0b6a9348598154'
+        location = geocode_location(latitude, longitude, api_key)
 
         user = User.query.filter_by(email=email).first()
         if user:
             if check_password_hash(user.password, password):
+                user.location = location
+                db.session.commit()
                 flash('Logged in successfully!', category='success')
                 login_user(user, remember=True)
                 return redirect(url_for('views.home'))
