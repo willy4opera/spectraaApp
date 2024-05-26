@@ -8,6 +8,9 @@ from flask_login import LoginManager
 from flask_migrate import Migrate
 import os
 import secrets
+import requests
+from geopy.geocoders import OpenCage
+import json
 
 # Here, we initialize or ORM
 # The SQLAlchemy
@@ -19,7 +22,7 @@ def create_app():
     app = Flask(__name__)
     upload_folder = os.path.join('static', 'uploads')
     app.config['UPLOAD'] = upload_folder
-    app.config['UPLOAD_EXTENSIONS'] = ['.jpg', '.gif']
+    app.config['UPLOAD_EXTENSIONS'] = ['.jpg', '.jpeg','.gif']
     app.config['SECRET_KEY'] = 'hjshjhdjah kjshkjdhjs'
     app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{DB_NAME}'
     db.init_app(app)
@@ -76,3 +79,7 @@ def save_profile(picture):
     return picture_fn
 
 
+def geocode_location(latitude, longitude, api_key):
+    geolocator = OpenCage(api_key)
+    location = geolocator.reverse((latitude, longitude))
+    return location.address

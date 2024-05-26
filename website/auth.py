@@ -1,20 +1,29 @@
-from flask import Blueprint, render_template, request, flash, redirect, url_for
+'''
+Here, we import the require packages and library for
+Our auth module.
+'''
+from flask import Blueprint, render_template, request, flash, redirect, url_for, jsonify
 from .models import User
 from werkzeug.security import generate_password_hash, check_password_hash
-from . import db   ##means from __init__.py import db
+from . import db  # means from __init__.py import db
 from flask_login import login_user, login_required, logout_user, current_user
 import uuid as uuid
 from werkzeug.utils import secure_filename
 from . import save_profile
+from . import geocode_location
 
 
-
-
-
+'''
+Here, we defined the set of allowed file extention
+for uploading to the server.
+'''
 ALLOWED_EXTENSIONS = {'txt', 'pdf', 'jpg', 'jpeg', 'gif'}
+
+
 def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
 
 auth = Blueprint('auth', __name__)
 
@@ -46,9 +55,12 @@ def logout():
     flash('Goodby! See you soon', category='info')
     return redirect(url_for('auth.login'))
 
+# The sign up route.
+
 
 @auth.route('/sign-up', methods=['GET', 'POST'])
 def sign_up():
+   
     if request.method == 'POST':
         email = request.form.get('email')
         first_name = request.form.get('FName')
@@ -58,7 +70,95 @@ def sign_up():
         phone_num = request.form.get('Phone_Number')
         address = request.form.get('address')
         dateofbirth = request.form.get('DOD')
+        latitude = request.form.get('latitude')
+        longitude = request.form.get('longitude')
 
+            # Simple validation
+        if latitude is None or longitude is None:
+            return jsonify({'success': False, 'message': 'Missing information'}), 400
+        api_key = '250b35f249134d77af0b6a9348598154'
+        location = geocode_location(latitude, longitude, api_key)
+        if 'profile_pic' not in request.files:
+            flash('No file part', category='error')
+            return redirect(request.url)
+        profile_pic = request.files['profile_pic']
+        # if user does not select file, browser also
+        # submit an empty part without filename
+        if profile_pic.filename == '':
+            flash('No selected file', category='error')
+            return redirect(request.url)
+
+        pic_name = save_profile(profile_pic)
+
+        user = User.query.filter_by(email=email).first()
+        user_mobile = User.query.filter_by(phone_num=phone_num).first()
+        if user:
+            flash('Email already exists.', category='error')
+
+        elif request.files['profile_pic'].filename == '':
+            flash('Please upload profile Picture', category='error')
+
+        
+        elif user_mobile:
+            flash('Phone Number Already Exist', category='error')
+
+        elif len(email) < 4:
+            flash('Email must be greater than 3 characters.', category='error')
+        elif len(first_name) < 2:
+            flash(
+                'First name must be greater than 1 character.',
+                category='error')
+        elif password1 != password2:
+            flash('Passwords don\'t match.', category='error')
+        elif len(password1) < 7:
+            flash('Password must be at least 7 characters.', category='error')
+        else:
+            new_user = User(
+                email=email,
+                dateofbirth=dateofbirth,
+                address=address,
+                phone_num=phone_num,
+                last_name=last_name,
+                profile_pic=pic_name,
+                first_name=first_name,
+                location = location,
+                password=generate_password_hash(
+                    password1,
+                    method='pbkdf2:sha1',
+                    salt_length=8))
+            db.session.add(new_user)
+            db.session.commit()
+            login_user(new_user, remember=True)
+            flash('Account created successfully!', category='success')
+            return redirect(url_for('views.home'))
+
+    return render_template("register.html", user=current_user)
+
+
+@auth.route('/account', methods=['GET', 'POST'])
+@login_required
+def user_account():
+    id = current_user.id
+
+    return render_template('account.html', user=current_user)
+
+
+@auth.route('/register', methods=['POST'])
+def register():
+    data = request.get_json()
+    if data:
+        
+   
+        latitude = data.get('latitude')
+        longitude = data.get('longitude')
+        email = request.form.get('email')
+        first_name = request.form.get('FName')
+        last_name = request.form.get('LName')
+        password1 = request.form.get('password1')
+        password2 = request.form.get('password2')
+        phone_num = request.form.get('Phone_Number')
+        address = request.form.get('address')
+        dateofbirth = request.form.get('DOD')
 
         if 'profile_pic' not in request.files:
             flash('No file part', category='error')
@@ -67,47 +167,65 @@ def sign_up():
         # if user does not select file, browser also
         # submit an empty part without filename
         if profile_pic.filename == '':
-            flash('No selected file', category='error') 
+            flash('No selected file', category='error')
             return redirect(request.url)
-        
+
         pic_name = save_profile(profile_pic)
 
-
-
         user = User.query.filter_by(email=email).first()
+        user_mobile = User.query.filter_by(phone_num=phone_num).first()
         if user:
             flash('Email already exists.', category='error')
 
-        
         elif request.files['profile_pic'].filename == '':
             flash('Please upload profile Picture', category='error')
+
+        
+        elif user_mobile:
+            flash('Phone Number Already Exist', category='error')
+
         elif len(email) < 4:
             flash('Email must be greater than 3 characters.', category='error')
         elif len(first_name) < 2:
-            flash('First name must be greater than 1 character.', category='error')
+            flash(
+                'First name must be greater than 1 character.',
+                category='error')
         elif password1 != password2:
             flash('Passwords don\'t match.', category='error')
         elif len(password1) < 7:
             flash('Password must be at least 7 characters.', category='error')
-        else:
-            new_user = User(email=email, dateofbirth=dateofbirth, address=address, phone_num=phone_num,
-                            last_name=last_name, profile_pic=pic_name, first_name=first_name, password=generate_password_hash(password1, method='pbkdf2:sha1', salt_length=8))
+        elif request.is_json:
+            data = request.get_json()
+            latitude = data.get('latitude')
+            longitude = data.get('longitude')
+
+            # Simple validation
+            if latitude is None or longitude is None:
+                return jsonify({'success': False, 'message': 'Missing information'}), 400
+            api_key = '250b35f249134d77af0b6a9348598154'
+            location = geocode_location(latitude, longitude, api_key)
+            new_user = User(
+                email=email,
+                dateofbirth=dateofbirth,
+                address=address,
+                phone_num=phone_num,
+                last_name=last_name,
+                profile_pic=pic_name,
+                first_name=first_name,
+                location = location,
+                password=generate_password_hash(
+                    password1,
+                    method='pbkdf2:sha1',
+                    salt_length=8))
             db.session.add(new_user)
             db.session.commit()
             login_user(new_user, remember=True)
             flash('Account created successfully!', category='success')
             return redirect(url_for('views.home'))
     
-    
 
-       
+   
 
+    """return jsonify({'success': True, 'message': 'User registered successfully!'})
+    """
     return render_template("register.html", user=current_user)
-
-@auth.route('/account', methods=['GET', 'POST'] )
-@login_required
-def user_account():
-    id = current_user.id
-
-    return render_template('account.html', user=current_user)
-
