@@ -1,7 +1,7 @@
 '''
 Imported required packages and library for our database model
 '''
-from . import db
+from .import db
 from flask_login import UserMixin
 from sqlalchemy.sql import func
 
@@ -13,6 +13,7 @@ class Services(db.Model):
     cost = db.Column(db.Integer)
     date = db.Column(db.DateTime(timezone=True), default=func.now())
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    service_banner = service_banner = db.Column(db.String(), nullable=True)
 
 
 class User(db.Model, UserMixin):
