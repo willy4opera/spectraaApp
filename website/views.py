@@ -4,17 +4,27 @@ and library needed for our Project
 '''
 from flask import Blueprint, render_template, request, flash, jsonify
 from flask_login import login_required, current_user
-from .models import Services
-from . import db
+from . models import Services, User
+from . import db, createsession_maker
 import json
+
 
 views = Blueprint('views', __name__)
 
 
 @views.route('/', methods=['GET', 'POST'])
 def home():
+    services = Services.query.all()
+    if services:
+        flash('Welcome Home', category='success')
+        return render_template(
+            "index.html",
+            services=services,
+            user=current_user)
 
-    return render_template("index.html", user=current_user)
+    else:
+        flash('Service Fetch failed', category='error')
+        return render_template("index.html", user=current_user)
 
 
 @views.route('/services', methods=['GET', 'POST'])
