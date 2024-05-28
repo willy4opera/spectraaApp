@@ -6,8 +6,7 @@
 <div class="card-box text-center">
     {% if user.profile_pic %}
 
-		<img src="{{ url_for('static', filename='uploads/' + user.profile_pic)}}" class="rounded-circle 
-		tar-xl img-thumbnail">
+		<img src="{{ url_for('static', filename='uploads/' + user.profile_pic)}}" class="rounded-circle avatar-xl img-thumbnail">
 		
 		{% else %}
         <img src="https://bootdey.com/img/Content/avatar/avatar7.png" class="rounded-circle avatar-xl img-thumbnail" alt="profile-image">
@@ -22,11 +21,10 @@
 Hi I'm Johnathn Deo,has been the industry's standard dummy text ever since the
 1500s, when an unknown printer took a galley of type.
 </p>
-<p class="text-muted mb-2 font-13"><strong>Full Name :</strong> <span class="ml-2">Nik G. Patel</span></p>
-<p class="text-muted mb-2 font-13"><strong>Mobile :</strong><span class="ml-2">(123)
-123 1234</span></p>
-<p class="text-muted mb-2 font-13"><strong>Email :</strong> <span class="ml-2 "><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="2e5b5d4b5c6e4b434f4742004a41434f4740">[email&#160;protected]</a></span></p>
-<p class="text-muted mb-1 font-13"><strong>Location :</strong> <span class="ml-2">USA</span></p>
+<p class="text-muted mb-2 font-13"><strong>Full Name :</strong> <span class="ml-2">{{ user.first_name }}, {{ user.last_name }}</span></p>
+<p class="text-muted mb-2 font-13"><strong>Mobile :</strong><span class="ml-2">{{ user.phone_num }}</span></p>
+<p class="text-muted mb-2 font-13"><strong>Email :</strong> <span class="ml-2 "><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="2e5b5d4b5c6e4b434f4742004a41434f4740">{{ user.email }}</a></span></p>
+<p class="text-muted mb-1 font-13"><strong>Location:</strong> <span class="ml-2">{{ user.location }}</span></p>
 </div>
 <ul class="social-list list-inline mt-3 mb-0">
 <li class="list-inline-item">

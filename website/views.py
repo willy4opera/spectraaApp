@@ -38,6 +38,7 @@ def detail():
     return render_template("detail.html", user=current_user)
 
 
+
 @views.route('/delete_service', methods=['POST'])
 def delete_service():
     # this function expects a JSON from the INDEX.js file

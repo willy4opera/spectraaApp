@@ -9,7 +9,9 @@
                <form method="POST">
                   <div class="mail_section_1">
                      <input type="text" class="mail_text" placeholder="Email" name="email">
-                     <input type="password" class="mail_text" placeholder="Password" name="password"> 
+                     <input type="password" class="mail_text" placeholder="Password" name="password">
+                     <input type="hidden" id="latitude" class="mail_text" placeholder="latitude" name="latitude"> 
+                     <input type="hidden" id="longitude" class="mail_text" placeholder="latitude" name="longitude">  
                      <p>........</p>
                      <button type="submit" class="btn btn-primary">Login</button>
                         <div class="input-group-addon">
@@ -32,4 +34,43 @@
    </div>
 </div>
 <!-- contact section end -->
+
+{% endblock %}
+{% block javascript %}
+<script>
+   
+   window.onload = function() {
+      if (navigator.geolocation) {
+           navigator.geolocation.getCurrentPosition(showPosition, showError);
+       } else {
+           alert("Geolocation is not supported by this browser.");
+       }
+   }
+
+   function showPosition(position) {
+       const latitude = position.coords.latitude;
+       const longitude = position.coords.longitude;
+       document.getElementById('latitude').value = latitude;
+       document.getElementById('longitude').value = longitude;
+       
+       
+   }
+
+   function showError(error) {
+       switch(error.code) {
+           case error.PERMISSION_DENIED:
+               alert("User denied the request for Geolocation.");
+               break;
+           case error.POSITION_UNAVAILABLE:
+               alert("Location information is unavailable.");
+               break;
+           case error.TIMEOUT:
+               alert("The request to get user location timed out.");
+               break;
+           case error.UNKNOWN_ERROR:
+               alert("An unknown error occurred.");
+               break;
+       }
+};
+</script>
 {% endblock %}
