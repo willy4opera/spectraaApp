@@ -1,0 +1,14 @@
+flask
+gunicorn
+flask-login
+Flask-Migrate
+Flask-SQLAlchemy
+flask-login
+Flask-Migrate
+requests 
+geopy
+
+
+
+
+
