@@ -16,7 +16,7 @@ views = Blueprint('views', __name__)
 def home():
     services = Services.query.all()
     if services:
-        flash('Welcome Home', category='success')
+        flash('Welcome... Home. ', category='info')
         return render_template(
             "index.html",
             services=services,
@@ -29,13 +29,23 @@ def home():
 
 @views.route('/services', methods=['GET', 'POST'])
 def services():
+    flash('Location service must be enable', category='info') 
 
     return render_template("services.html", user=current_user)
 
+@views.route('/contact', methods=['GET', 'POST'])
+def contact():
+    flash('We are closer to you than you imagine', category='info') 
+
+    return render_template("contact.html", user=current_user)
 
 @views.route('/detail', methods=['GET', 'POST'])
 def detail():
-
+    flash('Service Connect Request Successfully Sent!!', category='success') 
+    if request.method == 'POST':
+        flash('Service Connect Request Successfully Sent!!', category='success') 
+        return render_template("detail.html", user=current_user)
+    
     return render_template("detail.html", user=current_user)
 
 
