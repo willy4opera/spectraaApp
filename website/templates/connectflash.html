@@ -33,8 +33,12 @@
                                 value: "home",
                             },
                             addService: {
-                                text: "Add Services",
-                                value: "addService",
+                                text: "Services",
+                                value: "services",
+                            },
+                            connect: {
+                                text: "Connect",
+                                value: "connect",
                             }
                         }
                     }).then((value) => {
@@ -42,8 +46,11 @@
                             case "home":
                                 window.location.href = "{{ url_for('views.home') }}";
                                 break;
-                            case "addService":
-                                window.location.href = "{{ url_for('auth.add_service') }}";
+                            case "services":
+                                window.location.href = "{{ url_for('views.services') }}";
+                                break;
+                            case "connect":
+                                window.location.href = "{{ url_for('views.detail') }}";
                                 break;
                         }
                     });
