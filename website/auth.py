@@ -31,6 +31,7 @@ auth = Blueprint('auth', __name__)
 
 @auth.route('/login', methods=['GET', 'POST'])
 def login():
+    flash('Location service must be enable', category='info')
     if request.method == 'POST':
         email = request.form.get('email')
         password = request.form.get('password')
@@ -72,7 +73,7 @@ def logout():
 
 @auth.route('/sign-up', methods=['GET', 'POST'])
 def sign_up():
-
+    flash('Location service must be enable', category='info') 
     if request.method == 'POST':
         email = request.form.get('email')
         first_name = request.form.get('FName')
@@ -187,3 +188,5 @@ def add_service():
         flash('Service Added successfully!', category='success')
         return redirect(url_for('auth.add_service'))
     return render_template('addservices.html', user=current_user)
+
+
