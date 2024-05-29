@@ -32,11 +32,11 @@ def services():
 
     return render_template("services.html", user=current_user)
 
+
 @views.route('/detail', methods=['GET', 'POST'])
 def detail():
 
     return render_template("detail.html", user=current_user)
-
 
 
 @views.route('/delete_service', methods=['POST'])

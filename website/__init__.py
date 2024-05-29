@@ -1,6 +1,7 @@
 # Here we import all the packages that are required
 # By all the functions writtten in this module
-from flask import Flask, flash, abort, render_template, request, flash, redirect, url_for
+from flask import Flask, flash, abort, render_template, request
+from flask import flash, redirect, url_for
 from flask_login import login_user, login_required, logout_user, current_user
 from flask_sqlalchemy import SQLAlchemy
 from os import path

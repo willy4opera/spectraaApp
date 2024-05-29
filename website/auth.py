@@ -2,7 +2,8 @@
 Here, we import the require packages and library for
 Our auth module.
 '''
-from flask import Blueprint, render_template, request, flash, redirect, url_for, jsonify
+from flask import Blueprint, render_template, request, flash
+from flask import redirect, url_for, jsonify
 from .models import User, Services
 from werkzeug.security import generate_password_hash, check_password_hash
 from . import db  # means from __init__.py import db
