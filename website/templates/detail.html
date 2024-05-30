@@ -1,5 +1,6 @@
-{% extends 'main3.html' %}{% block title %}SERVICES{% endblock %} {% block body %}
-{% include 'servicesheader.html' %}<div class="breadcrumb">
+{% extends 'main3.html' %}{% block title %}CONNECT{% endblock %} {% block body %}
+{% include 'servicesheader.html' %}
+<div class="breadcrumb">
 	<div class="container">
 		<div class="breadcrumb-inner">
 			<ul class="list-inline list-unstyled">
@@ -446,7 +447,7 @@
 
 									<div class="add-btn">
 										<form action="/submit" method="POST"></form>
-										<a href="/detail" class="btn btn-primary"><button type="submit"></button> <i class="fa fa-plug inner-right-vs"></i>CONNECT</a>
+										<a href="/connect" class="btn btn-primary"><button id='connect' type="submit"></button> <i class="fa fa-plug inner-right-vs"></i>CONNECT</a>
 									</form>
 									</div>
 
@@ -974,3 +975,4 @@
 		</div><!-- /.row -->
 
         {% endblock %}
+		

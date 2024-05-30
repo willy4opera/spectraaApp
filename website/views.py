@@ -7,6 +7,7 @@ from flask_login import login_required, current_user
 from . models import Services, User
 from . import db, createsession_maker
 import json
+from flask import redirect, url_for
 
 
 views = Blueprint('views', __name__)
@@ -61,3 +62,14 @@ def delete_service():
             db.session.commit()
 
     return jsonify({})
+
+@views.route('/connect', methods=['GET', 'POST'])
+def connect():
+   
+    if current_user.is_authenticated:
+        flash('Service Connect Request Successfully Sent!!', category='success') 
+        return render_template("account.html", user=current_user)
+        
+    else:
+         flash('Kindly Login to request Connect!!', category='error')
+         return redirect(url_for('auth.login'))
