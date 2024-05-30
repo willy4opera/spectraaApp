@@ -72,4 +72,5 @@ def connect():
         
     else:
          flash('Kindly Login to request Connect!!', category='error')
-         return redirect(url_for('auth.login'))
+         """return redirect(url_for('auth.login'))"""
+         return render_template("login2.html", user=current_user)

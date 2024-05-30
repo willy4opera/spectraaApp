@@ -1,0 +1,62 @@
+<div class="container mt-5">
+    <!-- SweetAlert Flash Message -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        {% for category, message in messages %}
+            <script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    // Determine icon based on category
+                    let icon;
+                    switch ("{{ category }}") {
+                        case "success":
+                            icon = "success";
+                            break;
+                        case "error":
+                            icon = "error";
+                            break;
+                        case "warning":
+                            icon = "warning";
+                            break;
+                        case "info":
+                            icon = "info";
+                            break;
+                        default:
+                            icon = "info";  // Default icon
+                    }
+
+                    swal({
+                        title: "{{ message }}",
+                        icon: icon,  // Set icon dynamically based on category
+                        buttons: {
+                            home: {
+                                text: "Home",
+                                value: "home",
+                            },
+                            Register: {
+                                text: "Register",
+                                value: "register",
+                            },
+                            Login: {
+                                text: "Login",
+                                value: "login",
+                            }
+                        }
+                    }).then((value) => {
+                        switch (value) {
+                            case "home":
+                                window.location.href = "{{ url_for('views.home') }}";
+                                break;
+                            case "register":
+                                window.location.href = "{{ url_for('auth.sign_up') }}";
+                                break;
+                            case "login":
+                                window.location.href = "{{ url_for('auth.login') }}";
+                                break;
+                        }
+                    });
+                });
+            </script>
+        {% endfor %}
+    {% endif %}
+{% endwith %}
+</div>
